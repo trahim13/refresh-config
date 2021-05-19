@@ -1,0 +1,45 @@
+spring:
+  application:
+    name: config-service
+  cloud:
+    loadbalancer:
+      ribbon:
+        enabled: false
+    config:
+      server:
+        git:
+          uri: https://github.com/trahim13/config-repo.git
+          searchPaths:
+            - '{application}'
+
+          #          username: trolley
+          #          password: strongpassword
+
+          basedir: "/home/trahim/config"
+          # В linux, например, может быть /tmp/config-repo-<randomid>.
+          #Некоторые операционные системы регулярно очищают временные каталоги.
+          #Это может привести к неожиданному поведению, например к отсутствию свойств.
+          #Чтобы избежать этой проблемы, измените каталог, который использует Config Server, установив на каталог, который не находится во временной структуре системы.
+          clone-on-start: true #клонировать репозиторий при запуске, по умолчанию: при запросе конфигурации
+          force-pull: true #принудительно извлекать данные из удаленного репозитория, если локальная копия грязная, например ОС что-то изменила в папке
+          deleteUntrackedBranches: true #принудительно удалять неотслеживаемые ветки из локального репозитория
+          refreshRate: 0
+          #как часто сервер конфигурации будет получать обновленные данные конфигурации из вашего бэкэнда Git
+          #в секундах. По умолчанию значение равно 0, что означает, что сервер конфигурации будет извлекать обновленную конфигурацию из репозитория Git при каждом запросе.
+server:
+  port: 8888
+
+logging:
+  level:
+    ROOT: INFO
+    org.springframework.cloud.config: DEBUG
+
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+
+
+
+
